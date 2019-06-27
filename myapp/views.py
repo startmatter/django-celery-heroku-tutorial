@@ -1,0 +1,14 @@
+from django.views.generic import TemplateView
+from myapp.models import MyModel
+from myapp.tasks import counter
+
+
+class HomeView(TemplateView):
+
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['counter'] = MyModel.objects.get(id=1).counter if MyModel.objects.exists() else 0
+        counter.delay()
+        return context
