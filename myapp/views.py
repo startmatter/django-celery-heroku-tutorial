@@ -9,6 +9,9 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['counter'] = MyModel.objects.get(id=1).counter if MyModel.objects.exists() else 0
+        instance_counter = 0
+        if MyModel.objects.exists():
+            instance_counter = MyModel.objects.get(id=1).counter
+        context['counter'] = instance_counter
         counter.delay()
         return context
